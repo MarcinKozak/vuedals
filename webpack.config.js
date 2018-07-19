@@ -34,10 +34,16 @@ module.exports = {
                 loader: 'vue'
             },
             {
-                test: /\.css$/,
-                loader: 'style!css'
+                test: /\.s[a|c]ss$/,
+                loader: 'style!css!sass'
             }
         ]
+    },
+
+    vue: {
+        loaders: {
+            scss: 'css-loader!sass-loader'
+        }
     },
 
     resolve: {
