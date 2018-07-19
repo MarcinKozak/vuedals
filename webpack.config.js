@@ -1,13 +1,13 @@
 const webpack = require('webpack');
-const package = require('./package.json');
+const packageInfo = require('./package.json');
 const banner  =
-    " Vuedals plugin v" + package.version + "\n" +
+    " Vuedals plugin v" + packageInfo.version + "\n" +
     "\n" +
     " Multiple event based modal windows, with a single component\n" +
     "\n" +
     " This is a plugin to open any number of modal windows without having to attach them to the DOM\n" +
-    " @author "+ package.author.name +" <"+ package.author.email +">\n" +
-    " "+ package.homepage +"\n" +
+    " @author "+ packageInfo.author.name +" <"+ packageInfo.author.email +">\n" +
+    " "+ packageInfo.homepage +"\n" +
     " Released under the MIT License.";
 
 module.exports = {
@@ -19,10 +19,6 @@ module.exports = {
         library: 'Vuedals',
         libraryTarget: 'umd',
         umdNamedDefine: true
-    },
-
-    resolve: {
-        extensions: ['', '.js', '.vue']
     },
 
     module: {
@@ -45,6 +41,8 @@ module.exports = {
     },
 
     resolve: {
+        extensions: ['', '.js', '.vue'],
+
         alias: {
             'vue$': 'vue/dist/vue.common.js'
         }

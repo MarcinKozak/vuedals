@@ -45,7 +45,7 @@ export default {
             if (data && data._isVue) {
                 for (let [idx, vuedal] of this.$refs.components.entries()) {
                     if (data === vuedal) {
-                        index = idx
+                        index = idx;
                         break
                     }
                 }
@@ -204,6 +204,10 @@ export default {
             if (this.current.closeOnBackdrop === true) {
                 this.dismiss();
             }
+        },
+
+        handleModalClick() {
+
         }
     },
 
@@ -230,7 +234,7 @@ export default {
 <template>
 <transition tag="div" name="vuedal">
     <div class="vuedals" v-show="vuedals.length" tabindex="0" @keyup.esc.prevent="handleEscapeKey($event)" @click="handleBackdropClick()">
-        <div class="vuedal" v-for="(vuedal, index) in vuedals" :key="index" :class="getCssClasses(index)" @click.stop>
+        <div class="vuedal" v-for="(vuedal, index) in vuedals" :key="index" :class="getCssClasses(index)" @click="handleModalClick()">
             <header v-if="(vuedal.title || vuedal.dismissable) && !vuedal.header">
                 <span class="title">{{ vuedal.title }}</span>
                 <span @click="dismiss()" v-if="vuedal.dismissable" class="close">&times;</span>
@@ -244,7 +248,7 @@ export default {
 </transition>
 </template>
 
-<style lang="sass">
+<style lang="scss">
 body.vuedal-open {
     overflow: hidden;
 }
