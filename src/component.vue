@@ -10,11 +10,15 @@
                 const defaults = {
                     title: null,
                     dismissable: true,
+                    header: null,
                     name: '',
                     size: 'md',
                     escapable: false,
                     closeOnBackdrop: true,
-                    stopEventPropagation: false,
+                    stopEventPropagation: true,
+                    async: null,
+                    showHeader: true,
+                    loading: (typeof(options.async) === 'function'),
                     onClose() {},
                     onDismiss() {}
                 };
@@ -28,6 +32,15 @@
                     index: this.$last,
                     options
                 });
+
+                if(typeof(options.async) === 'function') {
+                    //options.showHeader = false;
+
+                    options.async(options).then(() => {
+                        //options.showHeader = true;
+                        options.loading = false;
+                    });
+                }
 
                 this.body.classList.add('vuedal-open');
 
@@ -189,7 +202,7 @@
                 return classNames;
             },
 
-            handleEscapeKey(e) {
+            handleEscapeKey() {
                 if (!this.vuedals.length)
                     return;
 
@@ -208,9 +221,15 @@
             },
 
             handleModalClick(e) {
-                if(this.current.stopEventPropagation) {
+                if(this.current && this.current.stopEventPropagation) {
                     e.stopPropagation();
                 }
+            },
+
+            isAjaxable(index) {
+                const vuedal = this.vuedals[index];
+
+                return typeof(vuedal.ajax) === 'function';
             }
         },
 
@@ -236,22 +255,25 @@
 
 <template>
     <transition tag="div" name="vuedal">
-        <div class="vuedals" v-show="vuedals.length" tabindex="0" @keyup.esc.prevent="handleEscapeKey($event)" @click="handleBackdropClick()">
+        <div class="vuedals" v-show="vuedals.length" tabindex="0" @keyup.esc.prevent="handleEscapeKey()" @click="handleBackdropClick()">
             <div class="vuedal" v-for="(vuedal, index) in vuedals" :key="index" :class="getCssClasses(index)" @click="handleModalClick($event)">
-                <header v-if="(vuedal.title || vuedal.dismissable) && !vuedal.header">
+                <header v-if="vuedal.showHeader && (vuedal.title || vuedal.dismissable) && !vuedal.header">
                     <span class="title">{{ vuedal.title }}</span>
                     <span @click="dismiss()" v-if="vuedal.dismissable" class="close">&times;</span>
                 </header>
                 <header v-if="vuedal.header">
                     <component :is="vuedal.header.component" v-bind="vuedal.header.props"></component>
                 </header>
-                <component :is="vuedal.component" v-bind="vuedal.props" ref="components"></component>
+                <div v-if="vuedal.loading">
+                    <slot name="loader"></slot>
+                </div>
+                <component v-if="! vuedal.loading" :is="vuedal.component" v-bind="vuedal.props" ref="components"></component>
             </div>
         </div>
     </transition>
 </template>
 
-<style lang="scss">
+<style lang="sass">
     body.vuedal-open {
         overflow: hidden;
     }

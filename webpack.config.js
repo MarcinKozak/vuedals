@@ -22,6 +22,20 @@ module.exports = {
     },
 
     module: {
+        rules: [
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
+            }
+        ],
         loaders: [
             {
                 test: /\.js$/,
@@ -56,7 +70,7 @@ module.exports = {
 
     plugins: [
         new webpack.BannerPlugin(banner),
-         new webpack.optimize.UglifyJsPlugin({
+        new webpack.optimize.UglifyJsPlugin({
             minimize: false,
             sourceMap: false,
             mangle: false,
