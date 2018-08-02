@@ -265,7 +265,7 @@
                     <component :is="vuedal.header.component" v-bind="vuedal.header.props"></component>
                 </header>
                 <div v-if="vuedal.loading">
-                    <slot name="loader"></slot>
+                    <slot loader></slot>
                 </div>
                 <component v-if="! vuedal.loading" :is="vuedal.component" v-bind="vuedal.props" ref="components"></component>
             </div>
